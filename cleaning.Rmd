@@ -107,6 +107,9 @@ wbb_rosters23 <- left_join(wbb_rosters23, years_cleaned) %>% rename(year_clean =
 
 Some records list the player's high school in the previous school column. We filter those out and turn it into a list, then update `wbb_rosters23` to replace hs_clean with the previous school for those rows.
 
+NA's weren't an issue in this section as that meant the player never transferred from another college. What was a problem, however, was a high school or something else included in that column. In the code block below, we found all of the schools listed in this column that are not universities. A lot of them are development programs, high schools or even social media handles. One cool program we found was the Lubbock Titans, an athletics program for home schooled kids in western Texas. 
+
+To find all of these, we ran a simple group_by and summarize to see each of the previous schools listen in the data frame. Then we parsed through it, looking for any abnormalities. It's certainly possible we missed some listings, though we found a good chunk that turned out they didn't belong. 
 ```{r}
 hs_wbb <- wbb_rosters23 %>%
   filter(is.na(high_school))%>%
@@ -136,6 +139,43 @@ wbb_rosters23 <- wbb_rosters23 %>%
 
 wbb_rosters23 <- wbb_rosters23 %>% 
   mutate(previous_school = ifelse(previous_school == hs_clean, NA, previous_school))
+
+wbb_rosters23 %>% group_by(previous_school_clean) %>% summarize(total = n())
+
+#bellafontleroy
+#Boet Mataró
+#Boston Showstoppers
+#Business
+#CP Elite
+#CSUN
+#Cape Cod Warriors
+#DariannaBuggs22
+#DFW Elite
+#Drive 4 Stardom
+#IMG Academy
+#Helsinki Basketball Academy
+#IMG Academy
+#kendragillispie
+#In Baylor’s previous school column, players who didn’t transfer have their social media handles in the “previous_school_clean” column
+#kylaa000
+#Lone Wolf Athletics
+#Lubbock Titans
+#Maine Firecrackers
+#Manvel HS
+#Marketing
+#Mason City HS
+#Mass Huskies
+#Massachusetts Mavericks
+#MCW Starz
+#Providence School of Jacksonville
+#San Diego Sol
+#sarah_T2D
+#Segle XXI
+#Team Saints
+#Terry Sanford HS
+#U18 London Thunder
+#Wetterbygden Sparks
+#Worcester Sting Elite
 ```
 
 # Hometown/Homestate Cleaning
